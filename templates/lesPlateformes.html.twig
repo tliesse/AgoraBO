@@ -1,0 +1,95 @@
+{% extends "base.html.twig" %}
+{% block central %}
+	<!-- page start-->
+	<div class="col-sm-8">
+		<section class="panel">
+			<div class="chat-room-head">
+				<h3>
+					<i class="fa fa-angle-right"></i>
+					Gérer les plateformes
+				</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table table-striped table-advance table-hover">
+					<thead>
+						<tr class="tableau-entete">
+							<th>
+								<i class="fa fa-bullhorn"></i>
+								Identifiant</th>
+							<th>
+								<i class="fa fa-bookmark"></i>
+								Libellé</th>
+							<th>
+								<i class="fa fa-bookmark"></i>
+								Nombre de jeux</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- formulaire pour ajouter un nouveau plateforme-->
+						<tr>
+							<form action="{{ path('plateformes_ajouter') }}" method="post">
+								<td>Nouveau</td>
+								<td>
+									<input type="text" id="txtLibPlateforme" name="txtLibPlateforme" size="24" required minlength="4" maxlength="24" placeholder="Libellé" title="De 4 à 24 caractères"/>
+								</td>
+								<td>Nouveau</td>
+								<td>
+									<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="ajouterNouveauPlateforme" title="Enregistrer nouvelle plateforme">
+										<i class="fa fa-save"></i>
+									</button>
+									<button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie">
+										<i class="fa fa-eraser"></i>
+									</button>
+								</td>
+							</form>
+						</tr>
+						{% for key, plateforme in tbPlateformes %}
+							<tr>
+								<!-- formulaire pour modifier et supprimer les plateformes -->
+								<form method="post">
+									<td>{{ plateforme.identifiant }}<input type="hidden" name="txtIdPlateforme" value="{{ plateforme.identifiant }}"/></td>
+									<td>
+										{% if plateforme.identifiant != idPlateformeModif %}
+											{{ plateforme.libelle }}</td>
+									</td>
+									<td>
+										{{plateforme.nbJeux}}
+									</td>
+									<td>
+										{% if notification != 'rien' and plateforme.identifiant == idPlateformeNotif %}
+											<button class="btn btn-success btn-xs">
+												<i class="fa fa-check"></i>
+												{{ notification }}</button>
+										{% endif %}
+										<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="demanderModifierPlateforme" title="Modifier" formaction="{{ path('plateformes_demanderModifier') }}">
+											<i class="fa fa-pencil"></i>
+										</button>
+										<button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerPlateforme" title="Supprimer" formaction="{{ path('plateformes_supprimer') }}" onclick="return confirm('Voulez-vous vraiment supprimer cette plateforme ?');">
+											<i class="fa fa-trash-o "></i>
+										</button>
+									</td>
+								{{ include('messages.html.twig') }}
+								{% else %}
+									<input type="text" id="txtLibPlateforme" name="txtLibPlateforme" size="24" required minlength="4" maxlength="24" value="{{ plateforme.libelle }}"/>
+								</td>
+								<td>
+									<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="validerModifierPlateforme" title="Enregistrer" formaction="{{ path('plateformes_validerModifier') }}">
+										<i class="fa fa-save"></i>
+									</button>
+									<button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie">
+										<i class="fa fa-eraser"></i>
+									</button>
+									<button class="btn btn-warning btn-xs" type="submit" name="cmdAction" value="annulerModifierPlateforme" title="Annuler" formaction="{{ path('plateformes_afficher') }}">
+										<i class="fa fa-undo"></i>
+									</button>
+								</td>
+							{% endif %}
+						</form>
+					</tbody>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<!-- fin div panel-body--></td></tr></section><!-- fin section genres--></tbody></div><!--fin div col-sm-8-->{% endblock %}

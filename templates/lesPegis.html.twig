@@ -1,0 +1,106 @@
+{% extends "base.html.twig" %}
+{% block central %}
+	<!-- page start-->
+	<div class="col-sm-8">
+		<section class="panel">
+			<div class="chat-room-head">
+				<h3>
+					<i class="fa fa-angle-right"></i>
+					Gérer les pegis</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table table-striped table-advance table-hover">
+					<thead>
+						<tr class="tableau-entete">
+							<th>
+								<i class="fa fa-bullhorn"></i>
+								Identifiant</th>
+							<th>
+								<i class="fa fa-bookmark"></i>
+								AgeLimite</th>
+							<th>
+								<i class="fa fa-bookmark"></i>
+								Description</th>
+							<th>
+								<i class="fa fa-bookmark"></i>
+								Nombre Jeu</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- formulaire pour ajouter un nouveau Pegi-->
+						<tr>
+							<form action="{{ path('pegis_ajouter') }}" method="post">
+								<td>Nouveau</td>
+								<td>
+									<input type="text" id="txtAgeLimite" name="txtAgeLimite" size="24" required minlength="1" maxlength="2" placeholder="Age Limite" title="De 1 à 2 caractères"/>
+								</td>
+								<td>
+									<input type="text" id="txtDescPegi" name="txtDescPegi" size="96" required minlength="4" maxlength="100" placeholder="Description" title="De 4 à 100 caractères"/>
+								</td>
+								<td><!-- NB JEUX --></td>
+								<td>
+									<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="pegis_ajouter" title="Enregistrer nouveau pegi"> <i class="fa fa-save"></i></button>
+									<button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i class="fa fa-eraser"></i></button>
+								</td>
+							</form>
+						</tr>
+						{% for key, pegi in tbPegis %}
+							<tr>
+								<!-- formulaire pour modifier et supprimer les pegis-->
+								<form method="post">
+									<td>{{ pegi.identifiant }}<input type="hidden" name="txtIdPegi" value="{{ pegi.identifiant }}"/></td>
+									<td>
+										{% if pegi.identifiant != idPegiModif %}
+										{{ pegi.libelle }}
+									</td>
+									<td>	
+										{{pegi.description}}
+									</td>
+									<td>	
+										{{pegi.nbJeux}}
+									</td>
+									<td>
+										{% if notification != 'rien' and pegi.identifiant == idPegiNotif %}
+											<button class="btn btn-success btn-xs">
+												<i class="fa fa-check"></i>
+												{{ notification }}</button>
+										{% endif %}
+										<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="demanderModifierPegi" title="Modifier" formaction="{{ path('pegis_demanderModifier') }}">
+											<i class="fa fa-pencil"></i>
+										</button>
+										<button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerPegi" title="Supprimer" formaction="{{ path('pegis_supprimer') }}"onclick="return confirm('Voulez-vous vraiment supprimer ce pegi ?');">
+											<i class="fa fa-trash-o "></i>
+										</button>
+									</td>
+								{{ include('messages.html.twig') }}
+								{% else %}
+									<input type="text" id="txtAgeLimite" name="txtAgeLimite" size="24" required minlength="1" maxlength="2" value="{{ pegi.libelle }}"/>
+								<td>
+									<input type="text" id="txtDescPegi" name="txtDescPegi" size="96" required minlength="4" maxlength="100" value="{{ pegi.description }}"/>
+								</td>
+								<td>
+									<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="validerModifierPegi" title="Enregistrer" formaction="{{ path('pegis_validerModifier') }}">
+										<i class="fa fa-save"></i>
+									</button>
+									<button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie">
+										<i class="fa fa-eraser"></i>
+									</button>
+									<button class="btn btn-warning btn-xs" type="submit" name="cmdAction" value="annulerModifierPegi" title="Annuler" formaction="{{ path('pegis_afficher') }}">
+										<i class="fa fa-undo"></i>
+									</button>
+								</td>
+							{% endif %}
+						</form>
+					</tbody>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<!-- fin div panel-body-->
+</td></tr></section>
+<!-- fin section genres-->
+</tbody></div>
+<!--fin div col-sm-8-->
+{% endblock %}

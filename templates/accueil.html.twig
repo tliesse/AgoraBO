@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+{% block central %}
+<!--**********************************************************************************************************************************************************
+MAIN CONTENT
+*********************************************************************************************************************************************************** -->
+	<div class="container">
+		<div id="blocImage">
+			<img src="/assets/img/greeceAccueil.jpg" alt="Agora en Grèce" class="responsive">
+			<div id="blocImageTexte">	
+				Bonjour
+				{{ app.session.get('prenomUtilisateur') }}
+				{{ app.session.get('nomUtilisateur') }}
+			</div>
+		</div>
+	</div>
+{% endblock %}

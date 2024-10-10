@@ -1,0 +1,160 @@
+{% extends "base.html.twig" %}
+{% block central %}
+<!-- page start-->
+<div class="col-sm-12">
+	<section class="panel">
+		<div class="chat-room-head">
+			<h3>
+				<i class="fa fa-angle-right"></i>
+				Gérer les Jeux</h3>
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped table-advance table-hover">
+				<thead>
+					<tr class="tableau-entete">
+						<th><i class="fa fa-bullhorn"></i>Référence</th>
+						<th><i class="fa fa-bookmark"></i>Plateforme</th>
+						<th><i class="fa fa-bookmark"></i>Pegi</th>
+						<th><i class="fa fa-bookmark"></i>Genre</th>
+						<th><i class="fa fa-bookmark"></i>Marque</th>
+						<th><i class="fa fa-bookmark"></i>Nom</th>
+						<th><i class="fa fa-bookmark"></i>Prix</th>
+						<th><i class="fa fa-bookmark"></i>Date Sortie</th>
+					</tr>
+				</thead>
+				<tbody>
+				{{ include('messages.html.twig') }}
+					<!-- formulaire pour ajouter un nouveau Plateforme-->
+					<tr>
+						<form action="{{path('jeux_ajouter')}}" method="post">
+							<td>
+								<input type="text" id="txtRefJeu" name="txtRefJeu" size="24" required minlength="1" placeholder="refJeu" title="2 Caractères maximum"/>
+							</td>
+							<td>
+								{% set tbObjets, name, size, idSelect = tbPlateformes, 'txtIdPlateformeJeu', 1, '' %}
+								{{ include('liste.html.twig') }}
+							</td>
+							<td>
+								{% set tbObjets, name, size, idSelect = tbPegis, 'txtIdPegiJeu', 1, '' %}
+								{{ include('liste.html.twig') }}
+							</td>
+							<td>
+								{% set tbObjets, name, size, idSelect = tbGenres, 'txtIdGenreJeu', 1, '' %}
+								{{ include('liste.html.twig') }}
+							</td>
+							<td>
+								{% set tbObjets, name, size, idSelect = tbMarques, 'txtIdMarqueJeu', 1, '' %}
+								{{ include('liste.html.twig') }}
+							</td>
+							<td>
+								<input type="text" id="txtNomJeu" name="txtNomJeu" size="20" required minlength="1" maxlength="100" placeholder="Nom" title="Saisir un identifiant valide"/>
+							</td>
+							<td>
+								<input type="number" id="prixJeu" name="prixJeu" size="5" step="any" required maxlength="100" placeholder="Prix " title="Saisir un montant valide"/>
+							</td>
+							<td>
+								<input type="date" id="txtDateParutionJeu" name="txtDateParutionJeu" size="5" required minlength="1" maxlength="10" placeholder="Date" title="Saisir une date valide"/>
+							</td>
+							<td>
+								<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="ajouterNouveauJeu" title="Enregistrer nouvelle Jeu">
+									<i class="fa fa-save"></i>
+								</button>
+								<button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie">
+									<i class="fa fa-eraser"></i>
+								</button>
+							</td>
+						</tr>
+					</tr>
+				</tbody>
+			</form>
+		</tr>
+		{% for key, jeu in tbJeux %}
+			<tr>
+				<!-- formulaire pour modifier et supprimer les jeux-->
+				<form method="post">
+					<td>{{ jeu.identifiant }}<input type="hidden" name="txtRefJeu" value="{{ jeu.identifiant }}"/></td>
+					<td>
+						{% if jeu.identifiant != idJeuModif %}
+							{{ jeu.libPlateforme }}</td>
+					</td>
+					<td>
+						{{jeu.ageLimite}}
+					</td>
+					<td>
+						{{jeu.libGenre}}
+					</td>
+					<td>
+						{{jeu.nomMarque}}
+					</td>
+					<td>
+						{{jeu.libelle}}
+					</td>
+					<td>
+						{{jeu.prix}}
+					</td>
+					<td>
+						{{jeu.dateParution}}
+					</td>
+					<td>
+						{% if notification != 'rien' and jeu.identifiant == idJeuNotif %}
+							<button class="btn btn-success btn-xs">
+								<i class="fa fa-check"></i>
+								{{ notification }}</button>
+						{% endif %}
+						<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="demanderModifierJeu" title="Modifier" formaction="{{path('jeux_demanderModifier')}}">
+
+
+							<i class="fa fa-pencil"></i>
+						</button>
+						<button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerJeu" title="Supprimer" formaction="{{path('jeux_supprimer')}}" onclick="return confirm('Voulez-vous vraiment supprimer cette marque ?');">
+							<i class="fa fa-trash-o "></i>
+						</button>
+
+					</td>
+				{% else %}
+					{% set tbObjets, name, size, idSelect = tbPlateformes, 'txtIdPlateformeJeu',1 , jeu.idPlateforme %}
+					{{ include('liste.html.twig') }}
+					<td>
+						{% set tbObjets, name, size, idSelect = tbPegis, 'txtIdPegiJeu', 1, jeu.idPegi %}
+						{{ include('liste.html.twig') }}
+					</td>
+					<td>
+						{% set tbObjets, name, size, idSelect = tbGenres, 'txtIdGenreJeu', 1, jeu.idGenre %}
+						{{ include('liste.html.twig') }}
+					</td>
+					<td>
+						{% set tbObjets, name, size, idSelect = tbMarques, 'txtIdMarqueJeu', 1, jeu.idMarque %}
+						{{ include('liste.html.twig') }}
+					</td>
+					<td>
+						<input type="text" id="txtNomJeu" name="txtNomJeu" size="20" required minlength="1" maxlength="100" placeholder="Nom" title="Saisir un identifiant valide" value="{{ jeu.libelle }}"/>
+					</td>
+					<td>
+						<input type="number" id="prixJeu" name="prixJeu" size="5" step="any" required maxlength="100" placeholder="Prix " title="Saisir un montant valide" value="{{ jeu.prix }}"/>
+					</td>
+					<td>
+						<input type="date" id="txtDateParutionJeu" name="txtDateParutionJeu" size="5" required minlength="1" maxlength="10" placeholder="Date" title="Saisir une date valide" value="{{ jeu.dateParution }}"/>
+					</td>
+					<td>
+						<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="validerModifierMarque" title="Enregistrer" formaction="{{path('jeux_validerModifier')}}">
+
+							<i class="fa fa-save"></i>
+						</button>
+						<button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie">
+							<i class="fa fa-eraser"></i>
+						</button>
+						<button class="btn btn-warning btn-xs" type="submit" name="cmdAction" value="annulerModifierMarque" title="Annuler" formaction="{{path('jeux_afficher')}}">
+							<i class="fa fa-undo"></i>
+						</button>
+					</td>
+				{% endif %}
+			</tr>
+		</form>
+	</tbody>
+</tr>{% endfor %}</tbody></table></div>
+<!-- fin div panel-body-->
+</td></tr></section>
+<!-- fin section Pegis-->
+</tbody></div>
+<!--fin div col-sm-8-->
+{% endblock %}
